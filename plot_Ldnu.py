@@ -6,7 +6,7 @@ from TDE_parameters import *
 
 ##### read data from file
 
-Ldnuarr = np.loadtxt('specific_luminosity.txt', skiprows=1)
+Ldnuarr = np.loadtxt('specific_luminosity.txt')
 
 ##### discretization 
 

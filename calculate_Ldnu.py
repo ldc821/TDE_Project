@@ -122,8 +122,8 @@ for i_tobs in range(Ntobs):
 print('\n\nSaving data...')
 
 Ldnuarr_shape = '{}\t{}\n'.format(Nnuobs, Ntobs)
-with open('specific_luminosity.txt', 'w') as file:
-    file.write(Ldnuarr_shape)
-    np.savetxt('specific_luminosity.txt', Ldnuarr)
+# with open('specific_luminosity.txt', 'w') as file:
+#     file.write(Ldnuarr_shape)
+np.savetxt('specific_luminosity.txt', Ldnuarr)
 
 print('All done!')

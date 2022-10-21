@@ -1,4 +1,0 @@
-           Array            Type           Start             End          Length
-            tarr          linear        0.000000  1000000.000000              50
-            rarr          linear        0.400000      100.000000              50
-            aarr          linear        0.010000        0.300000             500

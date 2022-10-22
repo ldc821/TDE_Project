@@ -142,7 +142,7 @@ for i_t in range(Nt):
         for j in range(Nr):
             frac_diff = max(frac_diff, abs(asubold[j] - asubarr[i_t, j])/asubarr[i_t, j])
     if i_t/Nt > progress:
-        print('{:.2%}'.format(i_t/Nt), end='...')
+        print('{:.2%}'.format(i_t/Nt), end='..')
         progress += 0.1
 
 ##### save data to a file

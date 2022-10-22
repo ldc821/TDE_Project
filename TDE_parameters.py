@@ -28,4 +28,4 @@ Nnu = 100
 tol = 0.1                   # fractional tolerance for sublimation radius
 
 ##### folder to store the outputs
-folder = 'data_Ttde{:d}K_nH0{:.2e}_lamb0{:d}um'.format(T_tde, nH0, lamb0)
+folder = 'data_Ttde{:.2e}K_nH0{:.2e}_lamb0{:d}um'.format(T_tde, nH0, lamb0)

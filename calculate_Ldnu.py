@@ -88,16 +88,20 @@ def lum_dnu(tobs, i_nuobs):
     for i_r in range(Nr-1):
         rcm = rarr[i_r]*constCGS.pc2cm
         drcm = (rarr[i_r+1] - rarr[i_r])*constCGS.pc2cm
+        # print('min: {:.3f}pc, r: {:.3f}pc'.format(constCGS.C_LIGHT*(tobs-tmin)/constCGS.pc2cm, rarrlog[i_r]))
+        # light echo has already passed
+        if rcm < max(0, 2*constCGS.C_LIGHT*(tobs-tmax)):
+            continue 
+        # mumin= max(1 - constCGS.C_LIGHT*tobs/rcm, -1)
+        # 1e-10 is added to account for calculation instability that may cause t < 0
+        mumin = 1 - constCGS.C_LIGHT*tobs/rcm + 1e-10
+        # mumax = min(1 - constCGS.C_LIGHT*(tobs - tdur)/rcm, 1)
+        mumax = 1 - constCGS.C_LIGHT*(tobs - tdur)/rcm
         mu_integral = 0
-        mumin, mumax = max(1 - constCGS.C_LIGHT*tobs/rcm, -1), max(1 - constCGS.C_LIGHT*(tobs - tdur)/rcm, -1)
-        if mumax <= mumin: 
-            continue
         muarr = np.linspace(mumin, mumax, Nmu)
         for i_mu in range(Nmu - 1):
             dmu = muarr[i_mu+1] - muarr[i_mu]
             t = musolve_t(muarr[i_mu], rcm, tobs)
-            if t < 0:
-                continue
             mu_integral += dmu * jdnu_intp(t, i_r, i_nuobs)
         r_integral += mu_integral * rcm**2 * drcm
     return 8 * pi**2 * r_integral

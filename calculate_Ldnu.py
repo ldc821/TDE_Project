@@ -1,7 +1,6 @@
-from matplotlib.pyplot import contour
 import numpy as np
 import os
-from math import pi, log10, cos
+from math import pi, log10
 import constCGS
 
 ##### import parameters
@@ -49,8 +48,8 @@ elif aarr_info[1] == 'logarithmic':
     aarr = np.logspace(log10(ast), log10(aend), Na)
 
 # observation frequency
-lambobs = np.linspace(lambobsmin, lambobsmax, Nnuobs) # um
-nuobsarr = constCGS.C_LIGHT/(lambobs/constCGS.cm2um) # in Hz
+lambobsarr = np.linspace(lambobsmin, lambobsmax, Nnuobs) # um
+nuobsarr = constCGS.C_LIGHT/(lambobsarr/constCGS.cm2um) # in Hz
 
 # observation time
 tobsmin = robsmin*constCGS.pc2cm/constCGS.C_LIGHT

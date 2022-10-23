@@ -52,8 +52,8 @@ Tarr_shape = [int(shape) for shape in Tarr_shape]
 Tarr = np.reshape(Tarr, Tarr_shape)
 
 # observation frequency
-lambobs = np.linspace(lambobsmin, lambobsmax, Nnuobs) # um
-nuobsarr = constCGS.C_LIGHT/(lambobs/constCGS.cm2um) # in Hz
+lambobsarr = np.linspace(lambobsmin, lambobsmax, Nnuobs) # um
+nuobsarr = constCGS.C_LIGHT/(lambobsarr/constCGS.cm2um) # in Hz
 
 # emissivity
 jdnuarr = np.zeros((Nt, Nr, Nnuobs), dtype=float)

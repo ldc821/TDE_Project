@@ -21,7 +21,7 @@ This code is intended to simulate dust echo emission in the infrared from a tida
 2. Run `calculate_jdnu.py` to get the volumetric luminosity at oberserving wavelength
 3. Run `calculate_Ldnu.py` to calculate the light curve at designated viewing angle and wavelength
 
-### Visulzation 
+### Visualization 
 We also provide two files for visualization of the data, our plots require the matplotlib package
 - `plot_dust_sublimation.py`: plot temprature of dust of different sizes, a vertical line indicates that the dust has sublimated
 - `plot_light_curve.py`: plot the light curve of dust echo

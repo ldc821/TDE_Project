@@ -6,7 +6,7 @@ import constCGS
 ##### import parameters
 
 from TDE_parameters import *
-from observation_setup import *
+from TDE_observation_setup import *
 
 ##### read data from file
 
@@ -52,8 +52,10 @@ lambobsarr = np.linspace(lambobsmin, lambobsmax, Nnuobs) # um
 nuobsarr = constCGS.C_LIGHT/(lambobsarr/constCGS.cm2um) # in Hz
 
 # observation time
-tobsmin = robsmin*constCGS.pc2cm/constCGS.C_LIGHT
-tobsmax = robsmax*constCGS.pc2cm/constCGS.C_LIGHT
+# tobsmin = robsmin*constCGS.pc2cm/constCGS.C_LIGHT*(1-cos(max(0, 4*pi/180)))
+# tobsmin = robsmin*constCGS.pc2cm/constCGS.C_LIGHT
+# tobsmax = robsmax*constCGS.pc2cm/constCGS.C_LIGHT
+# tobsmax = 4e3*tobsmin
 tobsarr = np.logspace(log10(tobsmin), log10(tobsmax), Ntobs)
 
 # specific luminosity
@@ -87,11 +89,9 @@ def lum_dnu(tobs, i_nuobs):
     for i_r in range(Nr-1):
         rcm = rarr[i_r]*constCGS.pc2cm
         drcm = (rarr[i_r+1] - rarr[i_r])*constCGS.pc2cm
-        # print('min: {:.3f}pc, r: {:.3f}pc'.format(constCGS.C_LIGHT*(tobs-tmin)/constCGS.pc2cm, rarrlog[i_r]))
         # light echo has already passed
         if rcm < max(0, 2*constCGS.C_LIGHT*(tobs-tmax)):
             continue 
-        # mumin= max(1 - constCGS.C_LIGHT*tobs/rcm, -1)
         # 1e-10 is added to account for calculation instability that may cause t < 0
         mumin = 1 - constCGS.C_LIGHT*tobs/rcm + 1e-10
         # mumax = min(1 - constCGS.C_LIGHT*(tobs - tdur)/rcm, 1)
@@ -115,15 +115,16 @@ for i_tobs in range(Ntobs):
     for i_nuobs in range(Nnuobs):
         Ldnuarr[i_nuobs, i_tobs] = lum_dnu(tobs, i_nuobs)
     if i_tobs/Ntobs > progress:
-        print('{:.2%}'.format(i_tobs/Ntobs), end='...')
+        print('{:.2%}'.format(i_tobs/Ntobs))
         progress += 0.1
+print('{:.2%}'.format(1))
 
 ##### save data
 
-print('\n\nSaving data...')
+print('\nSaving data...')
 
 Ldnuarr_shape = '{}\t{}\n'.format(Nnuobs, Ntobs)
-with open(os.path.join(folder, 'specific_luminosity.txt'), 'w') as file:
+with open(os.path.join(folder, 'specific_luminosity_tobsmax{:.2e}.txt'.format(tobsmax)), 'w') as file:
     file.write(Ldnuarr_shape)
     np.savetxt(file, Ldnuarr)
 

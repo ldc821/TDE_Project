@@ -6,7 +6,11 @@ import os
 ##### import parameters
 
 from TDE_parameters import *
-from observation_setup import *
+from TDE_observation_setup import *
+# from PTF09ge_parameters import *
+# from PTF09ge_observation_setup import *
+# from ASASSN14li_parameters import *
+# from ASASSN14li_observation_setup import *
 
 ##### read data from file
 
@@ -75,7 +79,8 @@ def jdnu(nu, i_r, i_t):
     asub = asubarr[i_t, i_r]
     integral = 0
     for i in range(Na-1):
-        if aarr[i] <= asub or Tarr[i_t, i_r, i] < 100:
+        # if aarr[i] <= asub or Tarr[i_t, i_r, i] < 100:
+        if aarr[i] <= asub:
             continue
         aum = aarr[i]
         daum = aarr[i+1] - aarr[i]
@@ -96,13 +101,14 @@ for i_t in range(Nt):
         for i_r in range(Nr):
             jdnuarr[i_t, i_r, i_nu] = jdnu(nuobsarr[i_nu], i_r, i_t)
     if i_t/Nt > progress:
-        print('{:.2%}'.format(i_t/Nt), end='...')
+        print('{:.2%}'.format(i_t/Nt))
         progress += 0.1
+print('{:.2%}'.format(1))
 
 
 ##### save data 
 
-print('\n\nSaving data...')
+print('\nSaving data...')
 
 jdnuarr_shape = '{}\t{}\t{}\n'.format(Nt, Nr, Nnuobs)
 with open(os.path.join(folder, 'emissivity.txt'), 'w') as file:

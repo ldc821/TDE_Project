@@ -5,6 +5,7 @@ import os
 ##### import constants and TDE parameters
 import constCGS
 from TDE_parameters import *
+# from PTF09ge_parameters import *
 
 ##### discretization 
 
@@ -12,13 +13,12 @@ from TDE_parameters import *
 aarr = np.linspace(amin, amax, Na)   
 
 # distance from the center  
-# rarrlog = np.logspace(log10(rmin), log10(rmax), Nr)
-rarr = np.linspace(rmin, rmax, Nr)
+rarr = np.logspace(log10(rmin), log10(rmax), Nr)
+# rarr = np.linspace(rmin, rmax, Nr)
 
 # time 
 tarr = np.linspace(tmin, tmax, Nt, endpoint=False)
 tarr += (tarr[1] - tarr[0])/2.
-tarrday = tarr/constCGS.d2sec
 
 # source frequency
 numin, numax = hnumin*constCGS.eV2erg/constCGS.H_PLANCK, hnumax*constCGS.eV2erg/constCGS.H_PLANCK
@@ -57,8 +57,20 @@ def lumV(t, nu):
     surfa = 4*pi*(lumr*constCGS.au2cm)**2
     return B_nuT*surfa*4*pi
 
+######## ASASSN-14li
+# def lumV(t, nu):
+#     if t > tdur:
+#         return 0.
+#     try:
+#         B_nuT = 2*constCGS.H_PLANCK*nu**3/constCGS.C_LIGHT**2/(exp(constCGS.H_PLANCK*nu/constCGS.K_B/T_tde) - 1)
+#     except OverflowError:
+#         B_nuT = float(0)
+#     surfa = 4*pi*(lumr*constCGS.au2cm)**2
+#     return B_nuT*surfa*4*pi*exp(-t/t0)
+
+
 # dust extinction optical depth, Eq.24
-# quantities are converted cgs units
+# quantities are converted to cgs units
 # note that amax, asub are dimensionless here
 def taud(nu, i_t, i_r, amax, asubarr):
     lamb = constCGS.C_LIGHT/nu*constCGS.cm2um   
@@ -142,22 +154,21 @@ for i_t in range(Nt):
         for j in range(Nr):
             frac_diff = max(frac_diff, abs(asubold[j] - asubarr[i_t, j])/asubarr[i_t, j])
     if i_t/Nt > progress:
-        print('{:.2%}'.format(i_t/Nt), end='..')
+        print('{:.2%}...t = {:.2e}s, iteration = {:d}'.format(i_t/Nt, tarr[i_t], n_iter))
         progress += 0.1
 
 ##### save data to a file
 
-print('\n\nSaving data...')
+print('\nSaving data...')
 
 os.makedirs(folder)
 
 # arrays information
-# with open(folder+'arrays_info.txt', 'w') as file:
 with open(os.path.join(folder, 'arrays_info.txt'), 'w') as file:
     # information on the range of arrays
     file.write('{:>16}{:>16}{:>16}{:>16}{:>16}\n'.format('Array', 'Type', 'Start', 'End', 'Length'))
     file.write('{:>16}{:>16}{:>16f}{:>16f}{:>16d}\n'.format('tarr', 'linear', tmin, tmax, Nt))
-    file.write('{:>16}{:>16}{:>16f}{:>16f}{:>16d}\n'.format('rarr', 'linear', rmin, rmax, Nr))
+    file.write('{:>16}{:>16}{:>16f}{:>16f}{:>16d}\n'.format('rarr', 'logarithmic', rmin, rmax, Nr))
     file.write('{:>16}{:>16}{:>16f}{:>16f}{:>16d}\n'.format('aarr', 'linear', amin, amax, Na))
 
 # Td_shape = '{:>5d}{:>5d}{:>5d}'.format(Nt, Nr, Na)
